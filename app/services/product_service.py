@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from copy import deepcopy
 from datetime import UTC, datetime
-from typing import Any
 
 from app.models.product import Product, ProductCreate, ProductUpdate
 
@@ -58,11 +57,9 @@ def get_product(product_id: int) -> Product | None:
     return None
 
 
-def create_product(payload: dict[str, Any] | ProductCreate) -> Product:
+def create_product(payload: ProductCreate) -> Product:
     """Create and persist a product in the in-memory list."""
-    product_data = (
-        payload.model_dump() if isinstance(payload, ProductCreate) else payload
-    )
+    product_data = payload.model_dump()
     new_id = max((product.id for product in _PRODUCTS), default=0) + 1
     product = Product(
         id=new_id,
@@ -77,15 +74,11 @@ def create_product(payload: dict[str, Any] | ProductCreate) -> Product:
     return deepcopy(product)
 
 
-def update_product(
-    product_id: int, payload: dict[str, Any] | ProductUpdate
-) -> Product | None:
+def update_product(product_id: int, payload: ProductUpdate) -> Product | None:
     """Update an existing product in the in-memory list."""
     for index, product in enumerate(_PRODUCTS):
         if product.id == product_id:
-            product_data = (
-                payload.model_dump() if isinstance(payload, ProductUpdate) else payload
-            )
+            product_data = payload.model_dump()
             updated_product = Product(
                 id=product.id,
                 name=product_data["name"],

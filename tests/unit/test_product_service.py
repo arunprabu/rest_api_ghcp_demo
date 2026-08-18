@@ -1,3 +1,4 @@
+from app.models.product import ProductCreate, ProductUpdate
 from app.services.product_service import (
     create_product,
     delete_product,
@@ -24,13 +25,13 @@ def test_get_product_returns_matching_product() -> None:
 
 
 def test_create_product_adds_new_item() -> None:
-    payload = {
-        "name": "Monitor",
-        "description": "27-inch display",
-        "price": 349.99,
-        "category": "Electronics",
-        "in_stock": True,
-    }
+    payload = ProductCreate(
+        name="Monitor",
+        description="27-inch display",
+        price=349.99,
+        category="Electronics",
+        in_stock=True,
+    )
 
     created = create_product(payload)
 
@@ -40,13 +41,13 @@ def test_create_product_adds_new_item() -> None:
 
 
 def test_update_product_updates_existing_item() -> None:
-    payload = {
-        "name": "Updated Laptop",
-        "description": "Updated description",
-        "price": 1299.0,
-        "category": "Electronics",
-        "in_stock": False,
-    }
+    payload = ProductUpdate(
+        name="Updated Laptop",
+        description="Updated description",
+        price=1299.0,
+        category="Electronics",
+        in_stock=False,
+    )
 
     updated = update_product(1, payload)
 
